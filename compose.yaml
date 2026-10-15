@@ -25,7 +25,7 @@ services:
       LOCADORA_ATENDENTE_USUARIO: gerente
       LOCADORA_ATENDENTE_NOME: Gerente da Locadora
       LOCADORA_ATENDENTE_SENHA: senha-do-gerente
-      LOCADORA_ATENDENTE_GERENTE: "s"
+      LOCADORA_ATENDENTE_PAPEL: gerente
       LOCADORA_FORMATO_LOG: json
     depends_on:
       banco:
