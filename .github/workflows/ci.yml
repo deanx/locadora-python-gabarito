@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Instala o uv e o Python
-        uses: astral-sh/setup-uv@v10
+        uses: astral-sh/setup-uv@v10.3.0
         with:
           python-version: ${{ matrix.python }}
 
