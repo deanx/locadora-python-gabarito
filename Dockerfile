@@ -1,6 +1,6 @@
 # Dockerfile — a receita da imagem da API da locadora
 
-FROM python:3.14-slim
+FROM python:3.15-slim
 
 # Mostra os logs na hora, sem guardar em buffer
 ENV PYTHONUNBUFFERED=1
