@@ -1,5 +1,7 @@
 # Locadora Python — gabarito
 
+![CI](https://github.com/deanx/locadora-python-gabarito/actions/workflows/ci.yml/badge.svg)
+
 Sistema de uma locadora de veículos, desenvolvido em Python ao longo do
 curso **Python do zero ao profissional**. Este repositório é o
 **gabarito**: o estado do sistema no fim do curso, para você comparar com
