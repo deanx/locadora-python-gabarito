@@ -1,0 +1,16 @@
+# O que NÃO entra na imagem
+venv/
+.git/
+**/__pycache__/
+**/*.db
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+v6/exportacoes/
+v6/estado.json
+estudos_python/
+estudos_http/
+estudos_api/
+.env
+v6/backups/
+v6/caixa_de_saida/

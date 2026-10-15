@@ -1,0 +1,44 @@
+# compose.yaml — a locadora completa: banco, API e um banco só para testes
+
+services:
+  banco:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: locadora
+      POSTGRES_PASSWORD: senha-local
+      POSTGRES_DB: locadora
+    volumes:
+      - dados_banco:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U locadora -d locadora"]
+      interval: 2s
+      timeout: 5s
+      retries: 15
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      LOCADORA_URL_BANCO: postgresql+psycopg://locadora:senha-local@banco:5432/locadora
+      LOCADORA_CHAVE_SECRETA: ${LOCADORA_CHAVE_SECRETA:?defina LOCADORA_CHAVE_SECRETA no arquivo .env}
+      LOCADORA_ATENDENTE_USUARIO: gerente
+      LOCADORA_ATENDENTE_NOME: Gerente da Locadora
+      LOCADORA_ATENDENTE_SENHA: senha-do-gerente
+      LOCADORA_ATENDENTE_GERENTE: "s"
+      LOCADORA_FORMATO_LOG: json
+    depends_on:
+      banco:
+        condition: service_healthy
+
+  banco_teste:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: locadora
+      POSTGRES_PASSWORD: senha-local
+      POSTGRES_DB: locadora_teste
+    ports:
+      - "5433:5432"
+
+volumes:
+  dados_banco:

@@ -1,0 +1,70 @@
+# .github/workflows/ci.yml — confere tudo a cada push e pull request
+
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verifica:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.14", "3.15"]
+    continue-on-error: ${{ matrix.python == '3.15' }}
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: locadora
+          POSTGRES_PASSWORD: senha-local
+          POSTGRES_DB: locadora_teste
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U locadora -d locadora_teste"
+          --health-interval 2s
+          --health-timeout 5s
+          --health-retries 15
+
+    env:
+      LOCADORA_URL_BANCO: postgresql+psycopg://locadora:senha-local@localhost:5432/locadora_teste
+      LOCADORA_URL_BANCO_TESTE: postgresql+psycopg://locadora:senha-local@localhost:5432/locadora_teste
+
+    steps:
+      - name: Baixa o código
+        uses: actions/checkout@v7
+
+      - name: Instala o uv e o Python
+        uses: astral-sh/setup-uv@v10
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Instala as dependências (com as ferramentas do grupo dev)
+        run: uv sync --locked
+
+      - name: Estilo e erros comuns (ruff)
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+
+      - name: Tipos (mypy)
+        run: uv run mypy
+
+      - name: Regras da locadora (LOC001, LOC002)
+        run: uv run python v6/ferramentas/regras_locadora.py $(git ls-files 'v6/*.py')
+
+      - name: Migrações (alembic)
+        working-directory: v6
+        run: |
+          uv run alembic upgrade head
+          uv run alembic check
+
+      - name: Testes (pytest no PostgreSQL)
+        working-directory: v6
+        run: uv run python -m pytest -q
+
+      - name: Imagem Docker
+        run: docker build -t locadora-api .

@@ -1,0 +1,46 @@
+# =========================================================
+# .gitignore — arquivos que o Git deve ignorar
+# =========================================================
+
+# Bytecode Python — recriado automaticamente na execução
+__pycache__/
+*.pyc
+*.pyo
+
+# Ambientes virtuais — criados localmente (Aula 37)
+venv/
+.venv/
+env/
+
+# Configuração de editor — pessoal, não do projeto
+.vscode/
+.idea/
+
+# Sistema operacional (macOS e Windows)
+.DS_Store
+Thumbs.db
+
+# Segredos e credenciais — nunca versionar!
+.env
+*.key
+credentials.json
+
+# Bancos de dados locais — dados, não código (Aula 42)
+*.db
+*.sqlite
+*.sqlite3
+
+# Dados e logs de execução (Aulas 36 e 38)
+estado.json
+locadora.log
+locadora_erros.log
+
+# Backups do banco — têm dados de clientes (Aula 73)
+backups/
+
+# Caches das ferramentas (pytest, mypy, ruff, cobertura)
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/

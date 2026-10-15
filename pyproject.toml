@@ -1,0 +1,72 @@
+[project]
+name = "locadora"
+version = "1.0.0"
+description = "API da locadora de veículos do curso"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.20",
+    "anthropic>=1.11",
+    "fastapi>=0.142",
+    "httpx>=0.28",
+    "matplotlib>=3.11",
+    "openpyxl>=3.1",
+    "pandas>=3.0",
+    "psycopg[binary]>=3.3",
+    "pwdlib[argon2]>=0.3",
+    "pydantic>=2.13",
+    "pyjwt>=2.15",
+    "python-multipart>=0.0.32",
+    "sqlalchemy>=2.1",
+    "uvicorn>=0.54",
+    "typing-extensions>=4.12",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.18",
+    "pandas-stubs",
+    "pre-commit",
+    "pytest>=9.1",
+    "respx>=0.23",
+    "ruff>=0.14",
+    "types-openpyxl",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+# os módulos do projeto moram em v6/ (assim o ruff sabe quais imports são seus)
+src = ["v6"]
+extend-exclude = ["v6/migracoes/versions"]
+# o pre-commit entrega os arquivos um a um; sem isto, a exclusão é ignorada
+force-exclude = true
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "T10"]
+ignore = [
+    "B008",  # o FastAPI usa Depends(...) como valor padrão, de propósito
+    "E712",  # no SQLAlchemy, "== True" monta SQL; não é uma comparação Python
+    "E501",  # o tamanho das linhas fica por conta do ruff format
+]
+
+
+[tool.mypy]
+python_version = "3.12"
+files = ["v6"]
+mypy_path = ["v6", "v6/tests"]
+explicit_package_bases = true
+exclude = ["v6/migracoes/versions"]
+enable_error_code = ["deprecated"]
+
+# Tipagem gradual: estes módulos já seguem o modo estrito, e não podem voltar atrás
+[[tool.mypy.overrides]]
+module = ["texto", "versao", "periodo", "moeda", "planos"]
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_any_generics = true
+warn_return_any = true
+
+[tool.pytest.ini_options]
+filterwarnings = ["error::DeprecationWarning"]
