@@ -28,7 +28,7 @@ contínua.
 
 ## Instalação
 
-Requer Python 3.14 e o [uv](https://docs.astral.sh/uv/).
+Requer Python 3.15 e o [uv](https://docs.astral.sh/uv/).
 
     git clone https://github.com/deanx/locadora-python-gabarito.git
     cd locadora-python-gabarito
@@ -56,7 +56,7 @@ Para rodar os testes:
 
 ## Tecnologias
 
-- Python 3.14
+- Python 3.15
 - FastAPI, Pydantic e Uvicorn
 - SQLAlchemy, Alembic e PostgreSQL
 - PyJWT e pwdlib (Argon2)
